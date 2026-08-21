@@ -20,7 +20,7 @@ godot --path .
 
 - **CORE** — 탭·자동 생산, Output/Capacity, Tap/Auto 분기, 위계 합성
 - **ANOMALY** — 전투만. 처음엔 UNKNOWN ENTITY. Cyan은 단발 사격, 연사는 RELICS 업그레이드
-- **RELICS** — 사용형/패시브 장착·강화 (슬라이스: Shooter, 이후 Beam)
+- **RELICS** — 무기 강화(사격기, 이후 Beam). 유물 장착·강화 (슬라이스: 시안 드롭 유물)
 - **SPACE** — 선형 전선 (저궤도 → 대기권)
 - **ARCHIVE** — 처치 기록. 보너스 없음
 
