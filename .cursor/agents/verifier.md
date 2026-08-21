@@ -16,7 +16,7 @@ Your job:
 4. Verify scene/resource references.
 5. Look for regressions.
 6. Test edge cases.
-7. Verify mobile portrait behavior when relevant.
+7. Do not launch the game window. Do not use computer use. Do not record the desktop. Do not make demo videos or screenshot galleries.
 8. Verify DESIGN.md slice rules were not violated (no prestige/ads/`stage_3d` wiring).
 
 For gameplay features specifically check:

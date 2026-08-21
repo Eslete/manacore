@@ -27,7 +27,7 @@ If that command fails, comment the full error on the pull request and stop. That
 - Do not merge.
 - Do not redesign visuals or silhouettes.
 - Do not tune `data.gd` numbers.
-- Do not launch the game window. Do not use computer use.
+- Do not launch the game window. Do not use computer use. Do not record the desktop. Do not make demo videos.
 - Do not execute OPTIMIZE.md.
 - Do not add files under `scripts/core/`, `scripts/combat/`, `ui/`, `visuals/`, or `data/`.
 

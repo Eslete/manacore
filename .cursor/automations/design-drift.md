@@ -11,7 +11,7 @@ Canonical design is DESIGN.md. Also obey AGENTS.md. The game is a portrait Godot
 - Do not edit any file.
 - Do not open a pull request.
 - Do not change DESIGN.md or AGENTS.md.
-- Do not launch the game window. Do not use computer use. Do not record the desktop.
+- Do not launch the game window. Do not use computer use. Do not record the desktop. Do not make demo videos.
 - Do not execute OPTIMIZE.md.
 - Do not instance or wire stage_3d.
 - Do not add prestige, ads, servers, offline rewards, or extra currencies.

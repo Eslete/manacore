@@ -11,7 +11,7 @@
 
 # 팀
 architect(readonly, 새 Game public API/파일 분할/DESIGN 충돌일 때만) → gameplay(game.gd/fmt.gd/data.gd) → presentation(main.gd, scenes, *_view.gd) → verifier(전투/세이브/내비게이션/새 메카닉 슬라이스 끝에 1회).
-부모는 디렉터. 파일당 작성자 1명. gameplay와 presentation을 같은 슬라이스에서 병렬로 돌리지 말 것. 시각 작업은 이 로컬 채팅에서. 클라우드는 숫자/카피/파싱만.
+부모는 디렉터. 파일당 작성자 1명. gameplay와 presentation을 같은 슬라이스에서 병렬로 돌리지 말 것. 시각 작업은 이 로컬 채팅에서. 클라우드는 숫자/카피/파싱만. 게임 창·화면 녹화·데모 영상·스크린샷 갤러리는 절대 만들지 말 것. `godot --headless --path . --quit-after 1`만.
 
 # Git / 작업 트리 (커밋하지 말 것, 사용자가 시키기 전)
 master 최신 커밋:
@@ -32,7 +32,7 @@ DESIGN.md, scripts/anomaly_view.gd, core_view.gd, data.gd, erosion_view.gd, fx_v
 - 코어 탭 모트 겹침은 이미 막혀 있음. 그건 사격 타격 FX와 다른 문제.
 
 # 첫 할 일
-Godot에서 플레이 확인하고, 미커밋 슬라이스가 위 3항과 DESIGN과 맞는지 본 다음 사용자 다음 지시를 기다려라. 사용자가 말하지 않은 새 시스템(프레스티지, 광고, 서버, 3D, Amber+)을 열지 마라. 커밋/푸시는 시킬 때만.
+헤드리스로 파싱만 확인하고, 미커밋 슬라이스가 위 3항과 DESIGN과 맞는지 본 다음 사용자 다음 지시를 기다려라. 게임 창을 열지 마라. 영상을 만들지 마라. 사용자가 말하지 않은 새 시스템(프레스티지, 광고, 서버, 3D, Amber+)을 열지 마라. 커밋/푸시는 시킬 때만.
 
 # 자동화
 .cursor/automations/ 에 design-drift.md, pr-godot-parse.md 있음. open_automation prefill URL은 깨져 있음. 사용자가 이미 붙여넣어 설정했을 수 있음. 새로 깔지 말 것.
