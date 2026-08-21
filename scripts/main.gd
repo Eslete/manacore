@@ -708,8 +708,6 @@ func _press_shooter() -> void:
 
 
 func _shooter_arm_text() -> String:
-	if not Game.combat_live():
-		return "대기"
 	if Game.has_rapid():
 		if Game.shooter_on:
 			return "사격 중지"
@@ -737,7 +735,7 @@ func _shooter_arm_modulate() -> Color:
 func _sync_weapon_chips() -> void:
 	if _pulse_b:
 		if Game.weapon_unlocked("beam"):
-			_pulse_b.text = Game.combat_status_label()
+			_pulse_b.text = "방전"
 		else:
 			_pulse_b.text = _shooter_arm_text()
 	_sync_discharge_buttons()
