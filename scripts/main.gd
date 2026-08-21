@@ -390,7 +390,7 @@ func _make_core_screen() -> Control:
 
 func _make_relics_screen() -> Control:
 	var root := Control.new()
-		_relic_title = _label("RELICS", 18, Color(0.7, 0.8, 0.9))
+	_relic_title = _label("RELICS", 18, Color(0.7, 0.8, 0.9))
 	_relic_title.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	_relic_title.offset_bottom = 28
 	root.add_child(_relic_title)
@@ -804,13 +804,6 @@ func _weapon_catalog_ids() -> Array[String]:
 			continue
 		if Game.weapon_unlocked(id):
 			out.append(id)
-	return out
-
-
-func _relic_catalog_ids() -> Array[String]:
-	var out: Array[String] = _weapon_catalog_ids()
-	for id in _visible_passive_ids():
-		out.append(id)
 	return out
 
 
