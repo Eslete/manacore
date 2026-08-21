@@ -390,7 +390,7 @@ func _make_core_screen() -> Control:
 
 func _make_relics_screen() -> Control:
 	var root := Control.new()
-	_relic_title = _label("RELICS · 장착 0/4", 18, Color(0.7, 0.8, 0.9))
+		_relic_title = _label("RELICS", 18, Color(0.7, 0.8, 0.9))
 	_relic_title.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	_relic_title.offset_bottom = 28
 	root.add_child(_relic_title)
@@ -791,10 +791,8 @@ func _modulate_weapon_chip(b: Button, active: bool, on_cd: bool, ready: bool) ->
 		b.modulate = Color(0.55, 0.6, 0.66)
 
 
-func _relic_catalog_ids() -> Array[String]:
+func _weapon_catalog_ids() -> Array[String]:
 	var out: Array[String] = []
-	for id in _visible_passive_ids():
-		out.append(id)
 	for id in Data.weapon_upgrade_ids():
 		if id == "rapid":
 			if Game.weapon_unlocked("shooter"):
@@ -806,6 +804,28 @@ func _relic_catalog_ids() -> Array[String]:
 			continue
 		if Game.weapon_unlocked(id):
 			out.append(id)
+	return out
+
+
+func _relic_catalog_ids() -> Array[String]:
+	var out: Array[String] = _weapon_catalog_ids()
+	for id in _visible_passive_ids():
+		out.append(id)
+	return out
+
+
+func _relic_list_entries() -> Array:
+	var out: Array = []
+	var weapons: Array[String] = _weapon_catalog_ids()
+	var relics: Array[String] = _visible_passive_ids()
+	if not weapons.is_empty():
+		out.append({"k": "h", "id": "weapons", "t": "무기"})
+		for id in weapons:
+			out.append({"k": "c", "id": id})
+	if not relics.is_empty():
+		out.append({"k": "h", "id": "relics", "t": "유물"})
+		for id in relics:
+			out.append({"k": "c", "id": id})
 	return out
 
 
@@ -825,9 +845,23 @@ func _relic_cell_h(cell_w: float) -> float:
 	return 8.0 + cell_w * 0.48 + 4.0 + 16.0 + 2.0 + 14.0 + 4.0 + 36.0 + 4.0
 
 
+func _relic_header_text(id: String) -> String:
+	if id == "relics":
+		return "유물 · 장착 %d/4" % Game.equipped.size()
+	return "무기"
+
+
+func _make_relic_header(id: String) -> Label:
+	var h := _label(_relic_header_text(id), 13, Color(0.62, 0.74, 0.82))
+	h.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	h.set_meta("entry_k", "h")
+	h.set_meta("entry_id", id)
+	return h
+
+
 func _layout_relics() -> void:
 	if _relic_title:
-		_relic_title.text = "RELICS · 장착 %d/4" % Game.equipped.size()
+		_relic_title.text = "RELICS"
 	if _relic_id != "":
 		if _relic_scroll:
 			_relic_scroll.visible = false
@@ -853,40 +887,57 @@ func _layout_relics() -> void:
 	var cell_w := float(g["cell_w"])
 	var cell_h := _relic_cell_h(cell_w)
 	var step := cell_h + gap
-	var ids: Array[String] = _relic_catalog_ids()
-	var rows := 0 if ids.is_empty() else int(ceili(float(ids.size()) / float(cols)))
-	var need_rebuild := _relic_layer.get_child_count() != ids.size()
+	var entries: Array = _relic_list_entries()
+	var spec := ""
+	for e in entries:
+		var kind := str(e.get("k", ""))
+		var eid := str(e.get("id", ""))
+		spec += kind + ":" + eid + "|"
+	var need_rebuild := str(_relic_layer.get_meta("list_spec", "")) != spec
 	if not need_rebuild:
 		if int(_relic_layer.get_meta("grid_cols", 0)) != cols:
 			need_rebuild = true
 		elif absf(float(_relic_layer.get_meta("grid_cell_w", 0.0)) - cell_w) > 0.5:
 			need_rebuild = true
-		else:
-			for i in ids.size():
-				var cell: Control = _relic_layer.get_child(i)
-				if str(cell.get_meta("relic_id", "")) != ids[i]:
-					need_rebuild = true
-					break
+		elif _relic_layer.get_child_count() != entries.size():
+			need_rebuild = true
+	_relic_layer.set_meta("list_spec", spec)
 	_relic_layer.set_meta("grid_cols", cols)
 	_relic_layer.set_meta("grid_cell_w", cell_w)
-	_relic_layer.custom_minimum_size = Vector2(s.x, float(rows) * step)
 	if need_rebuild:
 		for c in _relic_layer.get_children():
 			_relic_layer.remove_child(c)
 			c.queue_free()
-		for i in ids.size():
-			var made := _make_relic_card(ids[i], cell_w, cell_h)
-			var col := i % cols
-			var row := i / cols
-			made.position = Vector2(pad + float(col) * (cell_w + gap), float(row) * step)
-			_relic_layer.add_child(made)
-		return
-	for i in ids.size():
-		var existing: Control = _relic_layer.get_child(i)
-		var col := i % cols
-		var row := i / cols
-		existing.position = Vector2(pad + float(col) * (cell_w + gap), float(row) * step)
-		_sync_relic_card(existing, ids[i], cell_w, cell_h)
+		for e in entries:
+			if str(e.get("k", "")) == "h":
+				_relic_layer.add_child(_make_relic_header(str(e.get("id", ""))))
+			else:
+				_relic_layer.add_child(_make_relic_card(str(e.get("id", "")), cell_w, cell_h))
+	var y := 0.0
+	var col := 0
+	var header_h := 22.0
+	for i in entries.size():
+		var node: Control = _relic_layer.get_child(i)
+		var e: Dictionary = entries[i]
+		if str(e.get("k", "")) == "h":
+			if col != 0:
+				y += step
+				col = 0
+			if node is Label:
+				(node as Label).text = _relic_header_text(str(e.get("id", "")))
+			node.position = Vector2(pad, y)
+			node.size = Vector2(s.x - pad * 2.0, header_h)
+			y += header_h + 4.0
+			continue
+		if col >= cols:
+			col = 0
+			y += step
+		node.position = Vector2(pad + float(col) * (cell_w + gap), y)
+		_sync_relic_card(node, str(e.get("id", "")), cell_w, cell_h)
+		col += 1
+	if col != 0:
+		y += step
+	_relic_layer.custom_minimum_size = Vector2(s.x, y)
 
 
 func _make_relic_card(id: String, cell_w: float, cell_h: float) -> Panel:
