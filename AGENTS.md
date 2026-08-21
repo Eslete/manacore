@@ -163,3 +163,15 @@ Do the smallest implementation that satisfies the current requirement.
 When requirements conflict with existing architecture, report the conflict before rewriting unrelated systems.
 
 Current playable slice is **Cyan prologue + early Violet**: Output/Capacity, Tap/Auto branches, Flywheel, auto Shooter, simple Cyan anomalies + one three-stage boss, then independent Violet synthesis and a Reconstructor that teaches continuous damage before Beam. Do not ship a full Violet roster, Amber/Red/White, prestige/reset, ads, servers, or offline rewards. Do not stretch Cyan with regen walls or huge cost multipliers. Presentation stays simple assets + strong polish; do not wire `stage_3d` unless DESIGN.md is revised to require it.
+
+## Cursor Cloud specific instructions
+
+Never record the desktop. Never make walkthrough videos, demo clips, or screenshot galleries. Never launch the game window. Never use computer-use playtesting.
+
+Visual work stays in the local chat. Cloud agents only do numbers, copy, and parsing.
+
+Default check:
+
+`godot --headless --path . --quit-after 1`
+
+Do not treat a missing Godot binary as a reason to open a window.
