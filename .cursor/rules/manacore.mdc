@@ -1,0 +1,58 @@
+---
+description: Mana Core development rules from DESIGN.md
+alwaysApply: true
+---
+
+# Mana Core
+
+세로형 모바일 증분 게임. Godot 4 + GDScript. 타깃 Android 세로(1080×1920).
+
+플레이어는 인간이 아니라 **마력 코어**. Incremental + idle. 이동/회피/탐험/퀘스트/멀티/광고/서버/오프라인 보상/프레스티지는 넣지 않는다.
+
+최신 확정은 `DESIGN.md`가 기존 계획서, AGENTS 메모, 프로토타입보다 우선한다. 다만 첫 세션에서 당연히 이상할 허점(다른 화면에서 마나 소모, 가짜 탄, 상태 불명)은 사용자가 말하기 전에 고치고 DESIGN을 맞춘다.
+
+핵심 루프: CORE에서 마력 생성(Output/Capacity, Tap/Auto 분기) → ANOMALY에서 Relic으로 소비 → 코어 색 합성과 이상체 전선은 **서로 완전 게이트하지 않는 두 축**.
+
+## 화면
+
+기능별 전체 화면. 하나로 합치지 않는다.
+
+- **CORE** — 기본 시작 화면. 탭, 자동 생산, Output/Capacity, Tap/Auto 트리. 무기 UI 없음.
+- **ANOMALY** — 전투만. 이상체, Stability, 사용형 Relic, 공격 VFX. 발전기/인벤 없음.
+- **RELICS** — 사용형/패시브 장착·강화.
+- **SPACE** — 선형 경로. 자유 탐험 아님.
+- **ARCHIVE** — 하단 탭. 정보 기록만. 처치 횟수 보상·마스터리 없음.
+
+한국어 UI. 미확인 개체는 UNKNOWN ENTITY.
+
+## 현재 슬라이스 (Cyan 프롤로그 + Violet 초반)
+
+- Cyan은 짧은 튜토리얼. Tap/Auto 분기, Flywheel, Shooter 하나. 기본은 ANOMALY에서 단발 사격. 연사는 RELICS의 초반 총 업그레이드(사격 시작/중지). 탭을 나가면 멈춘다.
+- Cyan 전선은 단순 수치/껍질/페이즈. **재생을 중심 기믹으로 쓰지 않는다.** 보스만 껍질→격자→코어 3단. 보스는 Violet 코어를 주거나 막지 않는다.
+- Violet 합성은 코어 성장(Output/Capacity/저장 마력)이다. 보스 클리어 조건 아님. Beam은 합성 보너스가 아니다. Reconstructor(피격 공백 후 대량 회복)를 본 뒤에 Continuous Discharge로 연다.
+- Generator 업그레이드는 피해를 올리지 않는다. 무기 업그레이드는 생산을 올리지 않는다.
+- Tap 마력은 Output × 시간 환산 × Tap 배율. 입력은 초당 3–6회로 캡.
+- Amber / Red / White, 프레스티지, 대형 Violet 명단은 잠금.
+- 비주얼: 단순한 도형 + 강한 연출. 상태(플라이휠, 사격, 공백 회복 등)는 텍스트 문장이 아니라 빛·링·채움·모션으로 보여 준다. 버튼은 짧은 동사만. 쿠르츠게작트 소품을 베끼지 않는다. 유리구·FBM 금지. `stage_3d`는 DESIGN이 다시 열기 전까지 켜지 않는다.
+
+## 팀
+
+부모 Agent는 게임 디렉터다. 당연한 플레이 허점은 지시 없이 고친다. 자세한 운영은 `AGENTS.md`. 나중 최적화는 `OPTIMIZE.md` — 시키지 않으면 실행하지 않는다.
+
+역할은 4개다. 7명으로 쪼개지 않는다.
+
+- architect (readonly) → 새 Game API, 파일 분할, DESIGN 충돌일 때만
+- gameplay → `game.gd` / `fmt.gd` / `data.gd` (마력+전투+세이브+테이블)
+- presentation → `main.gd` / `scenes/**` / `*_view.gd`
+- verifier (readonly) → 사용자에게 보이는 슬라이스 끝에 한 번
+
+완료 주장은 combat/save/navigation에서 verifier 없이 받지 않는다. 오탈자·숫자만 고친 경우는 예외.
+
+## 구현
+
+- 데이터와 화면을 분리한다. 밸런스 상수는 UI에 묻지 않는다.
+- 코어는 크기 확대가 아니라 광량·밀도로 성장한다.
+- HP 대신 Integrity/Stability 용어.
+- 전선은 선형. 이전 이상체 재파밍 없음.
+- ARCHIVE는 성장 시스템이 아니다.
+- 페이스 문제는 새 시스템보다 수치·타이밍·연출부터 고친다.

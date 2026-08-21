@@ -1,0 +1,8 @@
+.godot/
+*.uid
+export.cfg
+export_credentials.cfg
+build/
+android/build/
+.DS_Store
+Thumbs.db
