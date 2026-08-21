@@ -2,8 +2,7 @@ extends Control
 
 ## Combat overlay. Draws bolts in _draw so the mobile renderer cannot drop a signal-only Control.
 
-const BOLT_DUR := 0.32
-const BOLT_CAP := 8
+const BOLT_DUR := 0.28
 
 var core_node: Control
 var anomaly_node: Control
@@ -22,9 +21,8 @@ func _ready() -> void:
 func _on_shot(ok: bool) -> void:
 	if not ok:
 		return
+	_bolts.clear()
 	_bolts.append({"age": 0.0, "dur": BOLT_DUR})
-	if _bolts.size() > BOLT_CAP:
-		_bolts = _bolts.slice(_bolts.size() - BOLT_CAP)
 
 
 func _process(dt: float) -> void:

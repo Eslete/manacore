@@ -33,8 +33,8 @@ var lv_collapse := 0
 var tap_flash := 0.0
 var shot_flash := 0.0
 
-var equipped: Array[String] = ["produce_20"]
-var owned: Array[String] = ["produce_20", "cap_50", "kill_return", "anti_regen"]
+var equipped: Array[String] = []
+var owned: Array[String] = []
 var archived: Array[String] = []
 var sighted: Array[String] = []
 var archive_relic: Dictionary = {}
@@ -556,12 +556,10 @@ func fire_pulse() -> void:
 
 func fire_shooter() -> void:
 	if not can_shooter():
-		shot_flash = 0.45
 		shot.emit(false)
 		return
 	var cost := shooter_cost()
 	if not try_spend(cost):
-		shot_flash = 0.45
 		shot.emit(false)
 		return
 	_used_shooter = true
@@ -1066,6 +1064,8 @@ func level_of(id: String) -> int:
 
 
 func toggle_passive(id: String) -> void:
+	if id not in owned:
+		return
 	if id in equipped:
 		equipped.erase(id)
 	else:
@@ -1144,13 +1144,17 @@ func _on_kill() -> void:
 
 
 func _record_archive(id: String) -> void:
-	if id not in archived:
+	var first := id not in archived
+	if first:
 		archived.append(id)
+		_grant_relic_drop(id)
 	if _used_weapons.is_empty():
 		archive_relic[id] = "기록 없음"
 	else:
 		archive_relic[id] = " · ".join(_used_weapons)
 	_sync_owned_unlocks()
+	if first:
+		changed.emit()
 
 
 func _advance_front() -> void:
@@ -1309,12 +1313,7 @@ func _restore_fresh_state() -> void:
 	tap_flash = 0.0
 	shot_flash = 0.0
 	equipped.clear()
-	equipped.append("produce_20")
 	owned.clear()
-	owned.append("produce_20")
-	owned.append("cap_50")
-	owned.append("kill_return")
-	owned.append("anti_regen")
 	discharge_unlocked = false
 	undamaged_t = 0.0
 	_clear_telemetry()
@@ -1434,7 +1433,20 @@ func load_game() -> void:
 		if not parts.is_empty():
 			_sync_integrity()
 		_resume_combat = alive and not front_cleared
+	if archived.is_empty():
+		owned.clear()
+		equipped.clear()
 	_sync_owned_unlocks()
+
+
+func _grant_relic_drop(enemy_id: String) -> void:
+	var drops: Dictionary = Data.relic_drops()
+	if not drops.has(enemy_id):
+		return
+	var rid := str(drops[enemy_id])
+	if rid == "" or rid in owned:
+		return
+	_ensure_owned(rid)
 
 
 func _ensure_owned(id: String) -> void:
@@ -1443,13 +1455,9 @@ func _ensure_owned(id: String) -> void:
 
 
 func _sync_owned_unlocks() -> void:
-	var table: Dictionary = Data.passives()
-	if table.has("anti_regen") and bool(table["anti_regen"].get("playable", false)):
-		_ensure_owned("anti_regen")
-	for id in ["tap_echo", "idle_coil", "shot_lens"]:
-		if table.has(id) and bool(table[id].get("playable", false)):
-			_ensure_owned(id)
-	for id in ["beam_eff", "high_mana", "after_burst"]:
+	if discharge_unlocked:
+		_ensure_owned("beam_eff")
+	for id in ["high_mana", "after_burst"]:
 		if passive_unlocked(id):
 			_ensure_owned(id)
 

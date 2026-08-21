@@ -579,6 +579,8 @@ Cyan anomalies can be made largely from primitives, procedural motion, emissive 
 **Relics**
 
 - small Cyan passive relic pool;
+- relics start **unowned**; first clear of each Cyan fight grants one relic (shard→응축 링, splinter→저장핵, regenerator→회수 파편, needle→사격 렌즈, plate→공진 탭, cluster→유휴 코일, orbit ring→붕괴 가루). Lattice does not drop. Relics do not auto-equip;
+- RELICS shows owned relics only — no warehouse of 미보유 rows;
 - Tap multiplier relic(s);
 - Auto multiplier relic(s);
 - Shooter economy/damage relic(s);
@@ -602,7 +604,8 @@ Cyan anomalies can be made largely from primitives, procedural motion, emissive 
 
 - CORE is one shaded monochrome sphere (fixed radius `0.22`) plus an **additive** shader corona — not stacked `draw_circle` discs. Generation motes only fall inward. Light/density, not size. Do not copy Kurtzgesagt props; match that polish of simple emissive shape.
 - polished Cyan Core tap feedback;
-- polished Shooter projectile/hit feedback;
+- polished Shooter projectile/hit feedback: **one bolt, one hit ping**. Mash / 연사 replaces the previous bolt and flare. No stacked hex/star glyphs. Failed 사격 does not flash;
+- Cyan first-region background is **Earth sky** (day gradient, clouds, ground horizon) — not a starfield. SPACE stays a linear map tab; later regions may go off-world;
 - Cyan anomaly silhouettes are unique per fight (shard / splinter / polyhedron / needle / plate / cluster / ring / lattice cage);
 - Cyan anomaly break/destruction effects;
 - clear Core tree UI;

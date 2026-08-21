@@ -659,7 +659,7 @@ func _caption_device(b: Button, id: String) -> void:
 func _visible_passive_ids() -> Array[String]:
 	var out: Array[String] = []
 	for id in Data.passive_ids_for_ui():
-		if Game.passive_unlocked(id):
+		if id in Game.owned and Game.passive_unlocked(id):
 			out.append(id)
 	return out
 

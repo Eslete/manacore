@@ -96,21 +96,26 @@ func _accent_lit() -> Color:
 
 
 func _surge_inflow() -> void:
+	var keep: Array[Dictionary] = []
+	for mote in _motes:
+		if not bool(mote.get("surge", false)):
+			keep.append(mote)
+	_motes = keep
 	var c := _center()
 	var r := _radius()
-	var n := 10
+	var n := 8
 	var charged := Game.level_of("flywheel") > 0 and Game.flywheel_charge_ratio() >= 0.8
 	for i in n:
 		if _motes.size() >= 28:
 			break
-		var a := TAU * float(i) / float(n) + randf() * 0.28
-		var spawn_r := r * randf_range(2.15, 2.75)
+		var a := TAU * float(i) / float(n) + randf() * 0.18
+		var spawn_r := r * randf_range(2.05, 2.45)
 		var p := c + Vector2(cos(a), sin(a)) * spawn_r
 		var to_c := c - p
 		var dist := to_c.length()
 		if dist < 1.0:
 			continue
-		var life := randf_range(0.42, 0.62)
+		var life := randf_range(0.28, 0.38)
 		var spd := (dist - r) / life
 		_motes.append({
 			"p": p,
@@ -119,10 +124,12 @@ func _surge_inflow() -> void:
 			"age": 0.0,
 			"r": randf_range(5.0, 7.2) * (1.22 if charged else 1.0),
 			"hot": charged,
+			"surge": true,
 		})
 
 
 func _muzzle_burst() -> void:
+	_bits.clear()
 	var c := _center()
 	var r := _radius()
 	var spark_r := maxf(8.0, r * 0.22)

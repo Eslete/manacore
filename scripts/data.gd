@@ -65,7 +65,7 @@ static func regions() -> Dictionary:
 			"name": "저궤도",
 			"label": "저궤도 · 침식 전선",
 			"req_tier": "cyan",
-			"visual": "orbit",
+			"visual": "sky",
 			"playable": true,
 		},
 		"atmosphere": {
@@ -505,6 +505,19 @@ static func passives() -> Dictionary:
 		"kill_return": {"name": "회수 파편", "blurb": "처치 시 마력 8% 반환", "kind": "kill_return", "value": 0.08, "visual": "shard", "req_tier": "cyan", "unlock_after": "", "playable": true},
 		"high_mana": {"name": "만충 증폭", "blurb": "마력 90% 이상일 때 피해 +25%", "kind": "high_mana_dmg", "value": 0.25, "visual": "flare", "req_tier": "violet", "unlock_after": "resonator", "playable": false},
 		"after_burst": {"name": "잔류 가속", "blurb": "버스트 후 생산 +15%", "kind": "after_burst", "value": 0.15, "visual": "wake", "req_tier": "violet", "unlock_after": "shell", "playable": false},
+	}
+
+
+static func relic_drops() -> Dictionary:
+	return {
+		"shard": "produce_20",
+		"splinter": "cap_50",
+		"regenerator": "kill_return",
+		"needle": "shot_lens",
+		"plate": "tap_echo",
+		"cluster": "idle_coil",
+		"orbit_ring": "anti_regen",
+		"lattice": "",
 	}
 
 

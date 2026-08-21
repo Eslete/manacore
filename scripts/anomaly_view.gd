@@ -730,21 +730,14 @@ static func paint_horizon(ci: CanvasItem, y: float, width: float, col: Color) ->
 
 func _draw_hit_flare(c: Vector2) -> void:
 	var flash := Game.shot_flash
-	if flash < 0.22:
+	if flash < 0.18:
 		return
-	var r := _span() * 0.22
-	var k := clampf((flash - 0.22) / 0.78, 0.0, 1.0)
-	var cyan := Color(0.22, 0.92, 1.0, 0.92 * k)
-	var white := Color(0.96, 0.98, 1.0, 0.95 * k)
-	_stroke_ring(c, r * (0.72 + k * 0.85), white, 5.0)
-	_stroke_ring(c, r * (1.05 + k * 0.55), cyan, 3.2)
-	draw_circle(c, r * (0.16 + k * 0.22), Color(0.22, 0.92, 1.0, 0.55 * k))
-	draw_circle(c, r * (0.08 + k * 0.10), Color(0.96, 0.98, 1.0, 0.88 * k))
-	for i in 6:
-		var a := TAU * float(i) / 6.0 + _t * 2.4
-		var inner := c + Vector2(cos(a), sin(a)) * r * 0.18
-		var outer := c + Vector2(cos(a), sin(a)) * r * (0.95 + k * 0.55)
-		draw_line(inner, outer, Color(0.96, 0.98, 1.0, 0.75 * k), 3.0, false)
+	var k := clampf(flash, 0.0, 1.0)
+	k *= k
+	var r := _span() * (0.16 + 0.10 * (1.0 - k))
+	var a := 0.55 * k
+	draw_arc(c, r, 0.0, TAU, 40, Color(0.96, 0.98, 1.0, a), 2.4, true)
+	draw_arc(c, r * 0.72, 0.0, TAU, 32, Color(0.22, 0.92, 1.0, a * 0.55), 1.6, true)
 
 
 func _stroke_ring(c: Vector2, radius: float, col: Color, width: float) -> void:
@@ -775,14 +768,9 @@ static func paint_shooter(ci: CanvasItem, from: Vector2, to: Vector2, u: float) 
 		var mk := 1.0 - u / 0.28
 		ci.draw_circle(from, 22.0 * mk, Color(0.22, 0.92, 1.0, 0.72 * mk), true, -1.0, false)
 		ci.draw_circle(from, 11.0 * mk, Color(0.96, 0.98, 1.0, 0.95 * mk), true, -1.0, false)
-	if u > 0.78:
-		var ik := (u - 0.78) / 0.22
-		ci.draw_circle(to, 28.0 * ik, Color(0.22, 0.92, 1.0, 0.45 * ik), true, -1.0, false)
-		ci.draw_circle(to, 14.0 * ik, Color(0.96, 0.98, 1.0, 0.72 * ik), true, -1.0, false)
-		for i in 5:
-			var a := TAU * float(i) / 5.0
-			var tip := to + Vector2(cos(a), sin(a)) * (18.0 + ik * 16.0)
-			ci.draw_line(to, tip, Color(0.96, 0.98, 1.0, 0.8 * ik), 3.0, false)
+	if u > 0.82:
+		var ik := (u - 0.82) / 0.18
+		ci.draw_arc(to, 10.0 + ik * 8.0, 0.0, TAU, 24, Color(0.96, 0.98, 1.0, 0.55 * ik), 2.0, true)
 
 
 func _poly(center: Vector2, sides: int, radius: float, rot: float, fill: Color, edge: Color) -> void:
