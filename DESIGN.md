@@ -580,7 +580,8 @@ Cyan anomalies can be made largely from primitives, procedural motion, emissive 
 
 - small Cyan passive relic pool;
 - relics start **unowned**; first clear of each Cyan fight grants one relic (shard→응축 링, splinter→저장핵, regenerator→회수 파편, needle→사격 렌즈, plate→공진 탭, cluster→유휴 코일, orbit ring→붕괴 가루). Lattice does not drop. Relics do not auto-equip;
-- RELICS shows owned relics only — no warehouse of 미보유 rows;
+- RELICS tab lists **무기** (Shooter ranks, 연사, later Beam) separately from **유물**. 사격기/연사 are weapon upgrades, not relics, and do not use the 4 equip slots;
+- RELICS shows owned relics only — no warehouse of 미보유 rows. 장착 n/4 is the relic group, not the screen title;
 - Tap multiplier relic(s);
 - Auto multiplier relic(s);
 - Shooter economy/damage relic(s);

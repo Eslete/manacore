@@ -18,8 +18,8 @@ alwaysApply: true
 기능별 전체 화면. 하나로 합치지 않는다.
 
 - **CORE** — 기본 시작 화면. 탭, 자동 생산, Output/Capacity, Tap/Auto 트리. 무기 UI 없음.
-- **ANOMALY** — 전투만. 이상체, Stability, 사용형 Relic, 공격 VFX. 발전기/인벤 없음.
-- **RELICS** — 사용형/패시브 장착·강화.
+- **ANOMALY** — 전투만. 이상체, Stability, 사격/빔, 공격 VFX. 발전기/인벤 없음.
+- **RELICS** — 무기 강화(사격기·연사)와 드롭 유물 장착. 사격기는 유물이 아니다. 장착 칸은 패시브 유물만.
 - **SPACE** — 선형 경로. 자유 탐험 아님.
 - **ARCHIVE** — 하단 탭. 정보 기록만. 처치 횟수 보상·마스터리 없음.
 
